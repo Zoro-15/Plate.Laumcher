@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/desktop_status_pill"
     android:layout_width="wrap_content"
-    android:layout_height="32dp"
+    android:layout_height="28dp"
     android:layout_gravity="top|end"
-    android:layout_marginTop="12dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginEnd="8dp"
     android:background="@drawable/bg_desktop_pill"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
     android:clickable="true"
     android:focusable="true">
 
@@ -22,23 +22,23 @@
         android:format12Hour="EEE h:mm a"
         android:format24Hour="EEE HH:mm"
         android:textColor="#FFFFFFFF"
-        android:textSize="12sp"
+        android:textSize="11sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         android:text="|"
         android:textColor="#55FFFFFF"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/battery_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="6dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="5dp"
         android:src="@drawable/ic_battery"
         android:tint="#FFFFFFFF"
         android:contentDescription="@null" />
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:text="--%"
         android:textColor="#FFFFFFFF"
-        android:textSize="12sp"
+        android:textSize="11sp"
         android:textStyle="bold" />
 
 </com.android.launcher3.desktop.StatusPillView>

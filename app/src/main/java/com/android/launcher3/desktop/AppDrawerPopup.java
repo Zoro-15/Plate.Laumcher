@@ -121,8 +121,8 @@ public class AppDrawerPopup extends AbstractFloatingView {
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.BOTTOM | Gravity.START;
-        lp.leftMargin = ResourceUtils.pxFromDp(16, launcher.getResources().getDisplayMetrics());
-        lp.bottomMargin = ResourceUtils.pxFromDp(56, launcher.getResources().getDisplayMetrics());
+        lp.leftMargin = ResourceUtils.pxFromDp(8, launcher.getResources().getDisplayMetrics());
+        lp.bottomMargin = ResourceUtils.pxFromDp(44, launcher.getResources().getDisplayMetrics());
         popup.setLayoutParams(lp);
 
         popup.populateApps(launcher);

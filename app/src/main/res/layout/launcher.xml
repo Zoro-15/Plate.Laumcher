@@ -35,10 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:paddingTop="48dp"
-            android:paddingBottom="56dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingTop="38dp"
+            android:paddingBottom="42dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:theme="@style/HomeScreenElementTheme"
             launcher:pageIndicator="@+id/page_indicator" />
 
@@ -81,13 +81,13 @@
 
         <ImageView
             android:id="@+id/btn_desktop_app_drawer"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_gravity="bottom|start"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="6dp"
             android:background="@drawable/bg_desktop_circle"
-            android:padding="9dp"
+            android:padding="7dp"
             android:src="@drawable/ic_apps_grid"
             android:tint="#FFFFFFFF"
             android:clickable="true"
