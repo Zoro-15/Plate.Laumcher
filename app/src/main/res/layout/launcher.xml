@@ -35,6 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:paddingTop="48dp"
+            android:paddingBottom="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:theme="@style/HomeScreenElementTheme"
             launcher:pageIndicator="@+id/page_indicator" />
 

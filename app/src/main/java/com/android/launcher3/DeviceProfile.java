@@ -73,6 +73,11 @@ public class DeviceProfile {
     public float workspaceSpringLoadShrinkFactor;
     public final int workspaceSpringLoadedBottomSpace;
 
+    // Desktop mode padding (landscape)
+    public final int desktopTopPaddingPx;
+    public final int desktopBottomPaddingPx;
+    public final int desktopSidePaddingPx;
+
     // Drag handle
     public final int verticalDragHandleSizePx;
     private final int verticalDragHandleOverlapWorkspace;
@@ -172,6 +177,9 @@ public class DeviceProfile {
 
         edgeMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_edge_margin);
         desiredWorkspaceLeftRightMarginPx = isVerticalBarLayout() ? 0 : edgeMarginPx;
+        desktopTopPaddingPx = ResourceUtils.pxFromDp(48, dm);
+        desktopBottomPaddingPx = ResourceUtils.pxFromDp(56, dm);
+        desktopSidePaddingPx = Math.max(desiredWorkspaceLeftRightMarginPx, ResourceUtils.pxFromDp(16, dm));
 
         int cellLayoutPaddingLeftRightMultiplier = !isVerticalBarLayout() && isTablet
                 ? PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER : 1;
@@ -215,7 +223,7 @@ public class DeviceProfile {
         updateAvailableDimensions(dm, res);
 
         // Now that we have all of the variables calculated, we can tune certain sizes.
-        if (!isVerticalBarLayout() && isPhone && isTallDevice) {
+        if (!isVerticalBarLayout() && !isLandscape && isPhone && isTallDevice) {
             // We increase the hotseat size when there is extra space.
             // ie. For a display with a large aspect ratio, we can keep the icons on the workspace
             // in portrait mode closer together by adding more height to the hotseat.
@@ -311,7 +319,7 @@ public class DeviceProfile {
     private void updateIconSize(float scale, Resources res, DisplayMetrics dm) {
         // Workspace
         final boolean isVerticalLayout = isVerticalBarLayout();
-        float invIconSizePx = isVerticalLayout ? inv.landscapeIconSize : inv.iconSize;
+        float invIconSizePx = (isVerticalLayout || isLandscape) ? inv.landscapeIconSize : inv.iconSize;
         iconSizePx = Math.max(1, (int) (ResourceUtils.pxFromDp(invIconSizePx, dm) * scale));
         iconTextSizePx = (int) (Utilities.pxFromSp(inv.iconTextSize, dm) * scale);
         iconDrawablePaddingPx = (int) (iconDrawablePaddingOriginalPx * scale);
@@ -319,7 +327,14 @@ public class DeviceProfile {
         cellHeightPx = iconSizePx + iconDrawablePaddingPx
                 + Utilities.calculateTextHeight(iconTextSizePx);
         int cellYPadding = (getCellSize().y - cellHeightPx) / 2;
-        if (iconDrawablePaddingPx > cellYPadding && !isVerticalLayout
+        if (isLandscape) {
+            int minDrawablePadding = ResourceUtils.pxFromDp(4, dm);
+            if (iconDrawablePaddingPx < minDrawablePadding) {
+                iconDrawablePaddingPx = minDrawablePadding;
+            }
+            cellHeightPx = iconSizePx + iconDrawablePaddingPx
+                    + Utilities.calculateTextHeight(iconTextSizePx);
+        } else if (iconDrawablePaddingPx > cellYPadding && !isVerticalLayout
                 && !isMultiWindowMode) {
             // Ensures that the label is closer to its corresponding icon. This is not an issue
             // with vertical bar layout or multi-window mode since the issue is handled separately
@@ -453,6 +468,14 @@ public class DeviceProfile {
                 padding.left = verticalDragHandleSizePx;
                 padding.right = hotseatBarSizePx;
             }
+        } else if (isLandscape) {
+            // Desktop landscape mode:
+            // Top padding ensures grid cells stay clear of the status pill (height 32dp + top margin 12dp = 44dp).
+            // Bottom padding ensures grid cells stay clear of bottom controls (app drawer button & nav pill).
+            padding.set(desktopSidePaddingPx,
+                    desktopTopPaddingPx,
+                    desktopSidePaddingPx,
+                    desktopBottomPaddingPx);
         } else {
             int paddingBottom = hotseatBarSizePx + verticalDragHandleSizePx
                     - verticalDragHandleOverlapWorkspace;

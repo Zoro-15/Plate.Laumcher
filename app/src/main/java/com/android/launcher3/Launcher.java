@@ -378,6 +378,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         setContentView(mLauncherView);
         getRootView().dispatchInsets();
+        setImmersiveStickyFullscreen();
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> {
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                setImmersiveStickyFullscreen();
+            }
+        });
 
         // Listen for broadcasts
         registerReceiver(mScreenOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -996,6 +1002,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mLauncherCallbacks.onResume();
         }
 
+        setImmersiveStickyFullscreen();
+
         TraceHelper.endSection("ON_RESUME");
         RaceConditionTracker.onEvent(ON_RESUME_EVT, EXIT);
     }
@@ -1024,6 +1032,20 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         mStateManager.onWindowFocusChanged();
+        if (hasFocus) {
+            setImmersiveStickyFullscreen();
+        }
+    }
+
+    public void setImmersiveStickyFullscreen() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
     }
 
     public interface LauncherOverlay {
@@ -1111,9 +1133,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mOverviewPanel = findViewById(R.id.overview_panel);
         mHotseat = findViewById(R.id.hotseat);
 
-        mLauncherView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        setImmersiveStickyFullscreen();
 
         // Setup the drag layer
         mDragLayer.setup(mDragController, mWorkspace);

@@ -26,6 +26,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="folderTextColor">?attr/workspaceTextColor</item>
     </style>
 
@@ -117,11 +118,15 @@
 
     <!-- A derivative project can extend these themes to customize the application theme without
          affecting the base theme -->
-    <style name="AppTheme" parent="@style/LauncherTheme" />
+    <style name="AppTheme" parent="@style/LauncherTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
     <style name="AppTheme.DarkMainColor" parent="@style/LauncherTheme.DarkMainColor" />
     <style name="AppTheme.DarkText" parent="@style/LauncherTheme.DarkText" />
 
-    <style name="AppTheme.Dark" parent="@style/LauncherTheme.Dark" />
+    <style name="AppTheme.Dark" parent="@style/LauncherTheme.Dark">
+        <item name="android:windowFullscreen">true</item>
+    </style>
     <style name="AppTheme.Dark.DarkMainColor" parent="@style/LauncherTheme.Dark.DarkMainColor" />
     <style name="AppTheme.Dark.DarkText" parent="@style/LauncherTheme.Dark.DarkText" />
 
