@@ -31,6 +31,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageInstaller;
 import android.content.pm.PackageInstaller.SessionInfo;
 import android.content.pm.ShortcutInfo;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Process;
 import android.os.UserHandle;
