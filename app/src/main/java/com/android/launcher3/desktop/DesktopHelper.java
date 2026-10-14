@@ -28,6 +28,11 @@ public final class DesktopHelper {
                 Method expand = statusbarManager.getMethod("expandNotificationsPanel");
                 expand.invoke(service);
             }
+        } catch (Throwable t) {
+            Log.e(TAG, "Failed to expand status bar / quick settings", t);
+        }
+    }
+
     /**
      * Toggles Android's Recent Apps / Overview menu.
      */
