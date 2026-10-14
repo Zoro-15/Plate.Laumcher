@@ -165,6 +165,26 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
     }
 
     @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (e1 != null && e2 != null) {
+            float dy = e2.getY() - e1.getY();
+            float dx = e2.getX() - e1.getX();
+            if (Math.abs(dy) > Math.abs(dx)) {
+                if (velocityY > 250 && dy > mTouchSlop) {
+                    cancelLongPress();
+                    com.android.launcher3.desktop.DesktopHelper.expandQuickSettings(mLauncher);
+                    return true;
+                } else if (velocityY < -250 && dy < -mTouchSlop) {
+                    cancelLongPress();
+                    com.android.launcher3.desktop.AppDrawerPopup.show(mLauncher);
+                    return true;
+                }
+            }
+        }
+        return super.onFling(e1, e2, velocityX, velocityY);
+    }
+
+    @Override
     public void onLongPress(MotionEvent event) {
         if (BaseFlags.LAUNCHER3_DISABLE_INTERACTIVE) {
             return;

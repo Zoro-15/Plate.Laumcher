@@ -71,6 +71,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <!-- Desktop Mode Elements -->
+        <include
+            layout="@layout/desktop_status_pill" />
+
+        <ImageView
+            android:id="@+id/btn_desktop_app_drawer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_desktop_circle"
+            android:padding="9dp"
+            android:src="@drawable/ic_apps_grid"
+            android:tint="#FFFFFFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Apps" />
+
+        <include
+            layout="@layout/desktop_nav_pill" />
+
     </com.android.launcher3.dragndrop.DragLayer>
 
 </com.android.launcher3.LauncherRootView>

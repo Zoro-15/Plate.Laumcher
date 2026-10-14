@@ -27,27 +27,7 @@ public class AllAppsSwipeController extends AbstractStateChangeTouchController {
 
     @Override
     protected boolean canInterceptTouch(MotionEvent ev) {
-        if (FeatureFlags.LAUNCHER3_REMOVE_DRAWER) {
-            return false;
-        }
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            mTouchDownEvent = ev;
-        }
-        if (mCurrentAnimation != null) {
-            // If we are already animating from a previous state, we can intercept.
-            return true;
-        }
-        if (AbstractFloatingView.getTopOpenView(mLauncher) != null) {
-            return false;
-        }
-        if (!mLauncher.isInState(NORMAL) && !mLauncher.isInState(ALL_APPS)) {
-            // Don't listen for the swipe gesture if we are already in some other state.
-            return false;
-        }
-        if (mLauncher.isInState(ALL_APPS) && !mLauncher.getAppsView().shouldContainerScroll(ev)) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     @Override

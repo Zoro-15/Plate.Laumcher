@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.launcher3.desktop.AppDrawerPopup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/desktop_drawer_popup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|start"
+    android:background="@drawable/bg_app_drawer_card"
+    android:elevation="12dp"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Search Box Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_search_input"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_allapps_search"
+            android:tint="#80FFFFFF"
+            android:contentDescription="@null" />
+
+        <EditText
+            android:id="@+id/drawer_search_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="Search apps..."
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textColorHint="#66FFFFFF"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Apps Grid RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drawer_apps_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="vertical" />
+
+</com.android.launcher3.desktop.AppDrawerPopup>

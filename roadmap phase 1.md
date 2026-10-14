@@ -99,5 +99,12 @@ graph LR
 - [x] Mirror standalone AOSP Launcher3 baseline locally and configure Gradle 8.
 - [x] Configure GitHub Actions CI workflow with APK artifact uploads.
 - [x] Synchronize baseline to GitHub repository `Zoro-15/Plate.Laumcher`.
-- [ ] **Pending:** User finalizes desktop UI design (1–2 days).
-- [ ] **Phase 2 Kickoff:** Implement persistent Taskbar, anchored Start Menu, and landscape desktop grid.
+- [x] **User finalizes desktop UI design:** Floating pills layout + popup card app drawer.
+- [x] **Phase 2 Implementation Complete:**
+  - [x] Upper-right status pill (live Time + Battery Icon + Battery % via broadcast receiver).
+  - [x] Bottom-right navigation pill (`=` Menu / options, Home button replacing `π`, `<` Back button).
+  - [x] Bottom-left app drawer button toggling floating `AppDrawerPopup` card.
+  - [x] Floating App Drawer card with instant real-time search and responsive grid.
+  - [x] Swipe down on workspace to expand Quick Settings / notification panel.
+  - [x] Landscape rotation enabled out of the box with side hotseat transpose disabled.
+  - [x] Minimal LOC footprint with zero third-party dependencies.

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/desktop_nav_pill"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_gravity="bottom|end"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_desktop_pill"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp">
+
+    <ImageView
+        android:id="@+id/btn_nav_menu"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        android:padding="5dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_nav_menu"
+        android:tint="#FFFFFFFF"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@null" />
+
+    <ImageView
+        android:id="@+id/btn_nav_home"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:padding="5dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_nav_home"
+        android:tint="#FFFFFFFF"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@null" />
+
+    <ImageView
+        android:id="@+id/btn_nav_back"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        android:padding="5dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_nav_back"
+        android:tint="#FFFFFFFF"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@null" />
+
+</LinearLayout>

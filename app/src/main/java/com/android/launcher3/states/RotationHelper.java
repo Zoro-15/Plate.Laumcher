@@ -40,12 +40,7 @@ public class RotationHelper implements OnSharedPreferenceChangeListener {
     public static final String ALLOW_ROTATION_PREFERENCE_KEY = "pref_allowRotation";
 
     public static boolean getAllowRotationDefaultValue() {
-        // If the device was scaled, used the original dimensions to determine if rotation
-        // is allowed of not.
-        Resources res = Resources.getSystem();
-        int originalSmallestWidth = res.getConfiguration().smallestScreenWidthDp
-                * res.getDisplayMetrics().densityDpi / DENSITY_DEVICE_STABLE;
-        return originalSmallestWidth >= 600;
+        return true;
     }
 
     public static final int REQUEST_NONE = 0;

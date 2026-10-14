@@ -1141,6 +1141,49 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         mAllAppsController.setupViews(mAppsView);
 
+        // Setup Desktop Elements
+        View pageIndicator = findViewById(R.id.page_indicator);
+        if (pageIndicator != null) {
+            pageIndicator.setVisibility(View.GONE);
+        }
+        if (mHotseat != null) {
+            mHotseat.setVisibility(View.GONE);
+        }
+
+        View btnAppDrawer = findViewById(R.id.btn_desktop_app_drawer);
+        if (btnAppDrawer != null) {
+            btnAppDrawer.setOnClickListener(v -> com.android.launcher3.desktop.AppDrawerPopup.toggle(this));
+        }
+
+        View btnNavMenu = findViewById(R.id.btn_nav_menu);
+        if (btnNavMenu != null) {
+            btnNavMenu.setOnClickListener(v -> {
+                if (AbstractFloatingView.getTopOpenView(this) != null) {
+                    AbstractFloatingView.closeAllOpenViews(this);
+                } else {
+                    com.android.launcher3.views.OptionsPopupView.showDefaultOptions(this, btnNavMenu.getRight(), btnNavMenu.getTop());
+                }
+            });
+            btnNavMenu.setOnLongClickListener(v -> {
+                com.android.launcher3.desktop.DesktopHelper.expandQuickSettings(this);
+                return true;
+            });
+        }
+
+        View btnNavHome = findViewById(R.id.btn_nav_home);
+        if (btnNavHome != null) {
+            btnNavHome.setOnClickListener(v -> {
+                AbstractFloatingView.closeAllOpenViews(this);
+                getStateManager().goToState(LauncherState.NORMAL);
+                mWorkspace.moveToDefaultScreen();
+            });
+        }
+
+        View btnNavBack = findViewById(R.id.btn_nav_back);
+        if (btnNavBack != null) {
+            btnNavBack.setOnClickListener(v -> onBackPressed());
+        }
+
         // <fix><2282271> launcher can be see after game exits
         if (BaseFlags.LAUNCHER3_DISABLE_INTERACTIVE) {
             mDragLayer.setVisibility(View.INVISIBLE);
