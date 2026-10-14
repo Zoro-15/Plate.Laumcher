@@ -240,9 +240,10 @@ public class AppDrawerPopup extends AbstractFloatingView {
             if (info.iconBitmap != null) {
                 holder.icon.setImageBitmap(info.iconBitmap);
             }
+            holder.itemView.setTag(info);
             holder.itemView.setOnClickListener(v -> {
                 close(true);
-                mLauncherInstance.startActivitySafely(v, info.getIntent(), info);
+                mLauncherInstance.startActivitySafely(v, info.getIntent(), info, null);
             });
         }
 
