@@ -1178,14 +1178,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         View btnNavMenu = findViewById(R.id.btn_nav_menu);
         if (btnNavMenu != null) {
             btnNavMenu.setOnClickListener(v -> {
-                if (AbstractFloatingView.getTopOpenView(this) != null) {
-                    AbstractFloatingView.closeAllOpenViews(this);
-                } else {
-                    com.android.launcher3.views.OptionsPopupView.showDefaultOptions(this, btnNavMenu.getRight(), btnNavMenu.getTop());
-                }
+                com.android.launcher3.desktop.DesktopHelper.toggleRecentApps(this);
             });
             btnNavMenu.setOnLongClickListener(v -> {
-                com.android.launcher3.desktop.DesktopHelper.expandQuickSettings(this);
+                com.android.launcher3.views.OptionsPopupView.showDefaultOptions(this, btnNavMenu.getRight(), btnNavMenu.getTop());
                 return true;
             });
         }

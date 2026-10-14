@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:launcher="http://schemas.android.com/apk/res-auto"
     android:id="@+id/desktop_nav_pill"
+    launcher:layout_ignoreInsets="true"
     android:layout_width="wrap_content"
-    android:layout_height="30dp"
+    android:layout_height="28dp"
     android:layout_gravity="bottom|end"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="6dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginBottom="2dp"
     android:background="@drawable/bg_desktop_pill"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -15,9 +17,9 @@
 
     <ImageView
         android:id="@+id/btn_nav_menu"
-        android:layout_width="28dp"
-        android:layout_height="24dp"
-        android:padding="3dp"
+        android:layout_width="26dp"
+        android:layout_height="22dp"
+        android:padding="2.5dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_nav_menu"
         android:tint="#FFFFFFFF"
@@ -27,11 +29,11 @@
 
     <ImageView
         android:id="@+id/btn_nav_home"
-        android:layout_width="28dp"
-        android:layout_height="24dp"
+        android:layout_width="26dp"
+        android:layout_height="22dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
-        android:padding="3dp"
+        android:padding="2.5dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_nav_home"
         android:tint="#FFFFFFFF"
@@ -41,9 +43,9 @@
 
     <ImageView
         android:id="@+id/btn_nav_back"
-        android:layout_width="28dp"
-        android:layout_height="24dp"
-        android:padding="3dp"
+        android:layout_width="26dp"
+        android:layout_height="22dp"
+        android:padding="2.5dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_nav_back"
         android:tint="#FFFFFFFF"

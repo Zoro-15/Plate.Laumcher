@@ -24,9 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.launcher3.AbstractFloatingView;
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.DeviceProfile;
+import com.android.launcher3.DragSource;
+import com.android.launcher3.DropTarget;
+import com.android.launcher3.ItemInfo;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.ResourceUtils;
+import com.android.launcher3.dragndrop.DragOptions;
+import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 import com.android.launcher3.views.ActivityContext;
 import com.android.launcher3.views.BaseDragLayer;
 
@@ -35,9 +40,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Desktop start-menu style floating popup card displaying all apps in a grid.
+ * Desktop start-menu style floating popup card displaying all apps in a 5-column grid.
  */
-public class AppDrawerPopup extends AbstractFloatingView {
+public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
 
     private Launcher mLauncher;
     private EditText mSearchInput;
@@ -74,8 +79,7 @@ public class AppDrawerPopup extends AbstractFloatingView {
             return titleA.compareToIgnoreCase(titleB);
         });
 
-        boolean isLandscape = launcher.getDeviceProfile().isLandscape;
-        int spanCount = isLandscape ? 8 : 4;
+        int spanCount = 5;
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
         mAdapter = new AppAdapter(launcher, mFullAppsList);
@@ -103,6 +107,11 @@ public class AppDrawerPopup extends AbstractFloatingView {
             return existing;
         }
 
+        View drawerBtn = launcher.findViewById(R.id.btn_desktop_app_drawer);
+        if (drawerBtn != null) {
+            drawerBtn.setVisibility(View.INVISIBLE);
+        }
+
         BaseDragLayer dragLayer = launcher.getDragLayer();
         AppDrawerPopup popup = (AppDrawerPopup) launcher.getLayoutInflater()
                 .inflate(R.layout.desktop_app_drawer_card, dragLayer, false);
@@ -110,19 +119,19 @@ public class AppDrawerPopup extends AbstractFloatingView {
         DeviceProfile dp = launcher.getDeviceProfile();
         int width;
         int height;
+        android.util.DisplayMetrics dm = launcher.getResources().getDisplayMetrics();
         if (dp.isLandscape) {
-            width = Math.min((int) (dp.widthPx * 0.60f),
-                    ResourceUtils.pxFromDp(560, launcher.getResources().getDisplayMetrics()));
-            height = (int) (dp.heightPx * 0.76f);
+            width = Math.min((int) (dp.widthPx * 0.45f), ResourceUtils.pxFromDp(360, dm));
+            height = (int) (dp.heightPx * 0.88f);
         } else {
-            width = dp.widthPx - ResourceUtils.pxFromDp(32, launcher.getResources().getDisplayMetrics());
-            height = (int) (dp.heightPx * 0.60f);
+            width = dp.widthPx - ResourceUtils.pxFromDp(16, dm);
+            height = (int) (dp.heightPx * 0.65f);
         }
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.BOTTOM | Gravity.START;
-        lp.leftMargin = ResourceUtils.pxFromDp(8, launcher.getResources().getDisplayMetrics());
-        lp.bottomMargin = ResourceUtils.pxFromDp(44, launcher.getResources().getDisplayMetrics());
+        lp.leftMargin = ResourceUtils.pxFromDp(4, dm);
+        lp.bottomMargin = ResourceUtils.pxFromDp(2, dm);
         popup.setLayoutParams(lp);
 
         popup.populateApps(launcher);
@@ -132,12 +141,10 @@ public class AppDrawerPopup extends AbstractFloatingView {
         popup.setPivotX(0);
         popup.setPivotY(height);
         popup.setAlpha(0f);
-        popup.setScaleX(0.85f);
-        popup.setScaleY(0.85f);
+        popup.setTranslationY(ResourceUtils.pxFromDp(25, dm));
         popup.animate()
                 .alpha(1f)
-                .scaleX(1f)
-                .scaleY(1f)
+                .translationY(0f)
                 .setDuration(180)
                 .setInterpolator(new DecelerateInterpolator())
                 .start();
@@ -158,11 +165,14 @@ public class AppDrawerPopup extends AbstractFloatingView {
     protected void handleClose(boolean animate) {
         if (mIsOpen) {
             mIsOpen = false;
+            View drawerBtn = mLauncher != null ? mLauncher.findViewById(R.id.btn_desktop_app_drawer) : null;
+            if (drawerBtn != null) {
+                drawerBtn.setVisibility(View.VISIBLE);
+            }
             if (animate) {
                 animate()
                         .alpha(0f)
-                        .scaleX(0.85f)
-                        .scaleY(0.85f)
+                        .translationY(ResourceUtils.pxFromDp(25, getResources().getDisplayMetrics()))
                         .setDuration(140)
                         .setInterpolator(new AccelerateInterpolator())
                         .withEndAction(() -> {
@@ -200,6 +210,12 @@ public class AppDrawerPopup extends AbstractFloatingView {
 
     @Override
     public void logActionCommand(int command) {}
+
+    @Override
+    public void onDropCompleted(View target, DropTarget.DragObject d, boolean success) {}
+
+    @Override
+    public void fillInLogContainerData(View v, ItemInfo info, Target target, Target targetParent) {}
 
     private class AppAdapter extends RecyclerView.Adapter<AppViewHolder> {
         private final List<AppInfo> mItems = new ArrayList<>();
@@ -244,6 +260,14 @@ public class AppDrawerPopup extends AbstractFloatingView {
             holder.itemView.setOnClickListener(v -> {
                 close(true);
                 mLauncherInstance.startActivitySafely(v, info.getIntent(), info, null);
+            });
+            holder.itemView.setOnLongClickListener(v -> {
+                DragOptions options = new DragOptions();
+                DeviceProfile grid = mLauncherInstance.getDeviceProfile();
+                options.intrinsicIconScaleFactor = (float) grid.allAppsIconSizePx / grid.iconSizePx;
+                mLauncherInstance.getWorkspace().beginDragShared(v, AppDrawerPopup.this, options);
+                close(false);
+                return true;
             });
         }
 

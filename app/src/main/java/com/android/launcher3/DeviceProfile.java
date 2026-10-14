@@ -177,9 +177,9 @@ public class DeviceProfile {
 
         edgeMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_edge_margin);
         desiredWorkspaceLeftRightMarginPx = isVerticalBarLayout() ? 0 : edgeMarginPx;
-        desktopTopPaddingPx = ResourceUtils.pxFromDp(38, dm);
-        desktopBottomPaddingPx = ResourceUtils.pxFromDp(42, dm);
-        desktopSidePaddingPx = Math.max(desiredWorkspaceLeftRightMarginPx, ResourceUtils.pxFromDp(10, dm));
+        desktopTopPaddingPx = ResourceUtils.pxFromDp(30, dm);
+        desktopBottomPaddingPx = ResourceUtils.pxFromDp(32, dm);
+        desktopSidePaddingPx = Math.max(desiredWorkspaceLeftRightMarginPx, ResourceUtils.pxFromDp(6, dm));
 
         int cellLayoutPaddingLeftRightMultiplier = !isVerticalBarLayout() && isTablet
                 ? PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER : 1;
@@ -319,11 +319,11 @@ public class DeviceProfile {
     private void updateIconSize(float scale, Resources res, DisplayMetrics dm) {
         // Workspace
         final boolean isVerticalLayout = isVerticalBarLayout();
-        // In landscape desktop mode, use a smaller, refined icon size (42dp) and text size (11sp)
+        // In landscape desktop mode, use a smaller, refined icon size (30dp) and text size (8.5sp)
         float invIconSizePx = isLandscape
-                ? (inv.landscapeIconSize > 0 && inv.landscapeIconSize != inv.iconSize ? inv.landscapeIconSize : 42f)
+                ? (inv.landscapeIconSize > 0 && inv.landscapeIconSize != inv.iconSize ? inv.landscapeIconSize : 30f)
                 : (isVerticalLayout ? inv.landscapeIconSize : inv.iconSize);
-        float invTextSize = isLandscape ? 11f : inv.iconTextSize;
+        float invTextSize = isLandscape ? 8.5f : inv.iconTextSize;
         iconSizePx = Math.max(1, (int) (ResourceUtils.pxFromDp(invIconSizePx, dm) * scale));
         iconTextSizePx = (int) (Utilities.pxFromSp(invTextSize, dm) * scale);
         iconDrawablePaddingPx = (int) (iconDrawablePaddingOriginalPx * scale);
@@ -332,7 +332,7 @@ public class DeviceProfile {
                 + Utilities.calculateTextHeight(iconTextSizePx);
         int cellYPadding = (getCellSize().y - cellHeightPx) / 2;
         if (isLandscape) {
-            int minDrawablePadding = ResourceUtils.pxFromDp(3, dm);
+            int minDrawablePadding = ResourceUtils.pxFromDp(2, dm);
             if (iconDrawablePaddingPx < minDrawablePadding) {
                 iconDrawablePaddingPx = minDrawablePadding;
             }

@@ -28,8 +28,46 @@ public final class DesktopHelper {
                 Method expand = statusbarManager.getMethod("expandNotificationsPanel");
                 expand.invoke(service);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to expand status bar / quick settings", e);
+    /**
+     * Toggles Android's Recent Apps / Overview menu.
+     */
+    public static void toggleRecentApps(com.android.launcher3.Launcher launcher) {
+        if (launcher == null) return;
+
+        // 1. Try IStatusBarService via ServiceManager
+        try {
+            Class<?> smClass = Class.forName("android.os.ServiceManager");
+            Method getService = smClass.getMethod("getService", String.class);
+            android.os.IBinder binder = (android.os.IBinder) getService.invoke(null, "statusbar");
+            if (binder != null) {
+                Class<?> stubClass = Class.forName("com.android.internal.statusbar.IStatusBarService$Stub");
+                Method asInterface = stubClass.getMethod("asInterface", android.os.IBinder.class);
+                Object statusBarService = asInterface.invoke(null, binder);
+                Method toggle = statusBarService.getClass().getMethod("toggleRecentApps");
+                toggle.invoke(statusBarService);
+                return;
+            }
+        } catch (Throwable t) {
+            Log.d(TAG, "IStatusBarService.toggleRecentApps failed", t);
+        }
+
+        // 2. Try StatusBarManager.toggleRecentApps
+        try {
+            @SuppressLint("WrongConstant")
+            Object service = launcher.getSystemService("statusbar");
+            Class<?> smClass = Class.forName("android.app.StatusBarManager");
+            Method toggle = smClass.getMethod("toggleRecentApps");
+            toggle.invoke(service);
+            return;
+        } catch (Throwable t) {
+            Log.d(TAG, "StatusBarManager.toggleRecentApps failed", t);
+        }
+
+        // 3. Fallback to Launcher Overview state
+        try {
+            launcher.getStateManager().goToState(com.android.launcher3.LauncherState.OVERVIEW);
+        } catch (Throwable t) {
+            Log.e(TAG, "LauncherState.OVERVIEW failed", t);
         }
     }
 }
