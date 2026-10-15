@@ -177,7 +177,7 @@ public class DeviceProfile {
 
         edgeMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_edge_margin);
         desiredWorkspaceLeftRightMarginPx = isVerticalBarLayout() ? 0 : edgeMarginPx;
-        desktopTopPaddingPx = ResourceUtils.pxFromDp(40, dm);
+        desktopTopPaddingPx = ResourceUtils.pxFromDp(54, dm);
         desktopBottomPaddingPx = ResourceUtils.pxFromDp(42, dm);
         desktopSidePaddingPx = Math.max(desiredWorkspaceLeftRightMarginPx, ResourceUtils.pxFromDp(12, dm));
 

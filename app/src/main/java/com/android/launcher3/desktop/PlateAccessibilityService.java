@@ -128,6 +128,13 @@ public class PlateAccessibilityService extends AccessibilityService {
 
         android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
 
+        int systemUiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
         // 1. Status Pill Overlay (Top Right)
         if (mStatusPillOverlay == null) {
             try {
@@ -139,9 +146,11 @@ public class PlateAccessibilityService extends AccessibilityService {
                         flags,
                         PixelFormat.TRANSLUCENT
                 );
+                statusLp.systemUiVisibility = systemUiFlags;
                 statusLp.gravity = Gravity.TOP | Gravity.END;
                 statusLp.x = ResourceUtils.pxFromDp(10, dm);
                 statusLp.y = 0;
+                mStatusPillOverlay.setSystemUiVisibility(systemUiFlags);
                 mWindowManager.addView(mStatusPillOverlay, statusLp);
             } catch (Exception e) {
                 Log.e(TAG, "Failed to attach status pill overlay", e);
@@ -159,6 +168,7 @@ public class PlateAccessibilityService extends AccessibilityService {
                         flags,
                         PixelFormat.TRANSLUCENT
                 );
+                navLp.systemUiVisibility = systemUiFlags;
                 navLp.gravity = Gravity.BOTTOM | Gravity.END;
                 navLp.x = ResourceUtils.pxFromDp(10, dm);
                 navLp.y = 0;
@@ -182,6 +192,7 @@ public class PlateAccessibilityService extends AccessibilityService {
                     btnBack.setOnClickListener(v -> performGlobalAction(GLOBAL_ACTION_BACK));
                 }
 
+                mNavPillOverlay.setSystemUiVisibility(systemUiFlags);
                 mWindowManager.addView(mNavPillOverlay, navLp);
             } catch (Exception e) {
                 Log.e(TAG, "Failed to attach nav pill overlay", e);
@@ -199,6 +210,7 @@ public class PlateAccessibilityService extends AccessibilityService {
                         flags,
                         PixelFormat.TRANSLUCENT
                 );
+                drawerLp.systemUiVisibility = systemUiFlags;
                 drawerLp.gravity = Gravity.BOTTOM | Gravity.START;
                 drawerLp.x = ResourceUtils.pxFromDp(10, dm);
                 drawerLp.y = 0;
@@ -212,11 +224,13 @@ public class PlateAccessibilityService extends AccessibilityService {
                     startActivity(homeIntent);
                 });
 
+                mDrawerBtnOverlay.setSystemUiVisibility(systemUiFlags);
                 mWindowManager.addView(mDrawerBtnOverlay, drawerLp);
             } catch (Exception e) {
                 Log.e(TAG, "Failed to attach drawer button overlay", e);
             }
         }
+        suppressSystemNavigationBar();
     }
 
     public void removeOverlays() {
@@ -277,5 +291,17 @@ public class PlateAccessibilityService extends AccessibilityService {
             }
         }
         return false;
+    }
+
+    public static void suppressSystemNavigationBar() {
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"su", "-c", "settings put global policy_control immersive.navigation=*"});
+            p.waitFor();
+        } catch (Throwable ignored) {}
+
+        try {
+            Process p = Runtime.getRuntime().exec("settings put global policy_control immersive.navigation=*");
+            p.waitFor();
+        } catch (Throwable ignored) {}
     }
 }
