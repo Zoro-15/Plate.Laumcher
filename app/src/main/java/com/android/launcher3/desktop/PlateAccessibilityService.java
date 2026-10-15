@@ -156,20 +156,20 @@ public class PlateAccessibilityService extends AccessibilityService {
             }
         }
 
-        // 2. Nav Pill Overlay (Bottom Right)
+        // 2. Nav Pill Overlay (Middle Right - Y Axis)
         if (mNavPillOverlay == null) {
             try {
                 mNavPillOverlay = inflater.inflate(R.layout.desktop_nav_pill, null);
                 WindowManager.LayoutParams navLp = new WindowManager.LayoutParams(
+                        ResourceUtils.pxFromDp(38, dm),
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        ResourceUtils.pxFromDp(36, dm),
                         overlayType,
                         flags,
                         PixelFormat.TRANSLUCENT
                 );
                 navLp.systemUiVisibility = systemUiFlags;
-                navLp.gravity = Gravity.BOTTOM | Gravity.END;
-                navLp.x = ResourceUtils.pxFromDp(10, dm);
+                navLp.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
+                navLp.x = 0;
                 navLp.y = 0;
 
                 View btnMenu = mNavPillOverlay.findViewById(R.id.btn_nav_menu);
@@ -307,19 +307,46 @@ public class PlateAccessibilityService extends AccessibilityService {
         suppressSystemNavigationBar(this);
     }
 
-    public static void suppressSystemNavigationBar(Context context) {
+    public static boolean hasSecureSettingsPermission(Context context) {
+        if (context == null) return false;
+        return context.checkCallingOrSelfPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean suppressSystemNavigationBar(Context context) {
+        boolean applied = false;
         if (context != null) {
             try {
-                Settings.Global.putString(context.getContentResolver(), "policy_control", "immersive.navigation=*");
+                // Suppress BOTH status bar and navigation bar system-wide across all apps
+                Settings.Global.putString(context.getContentResolver(), "policy_control", "immersive.full=*");
+                applied = true;
             } catch (Throwable ignored) {}
         }
         try {
-            Process p = Runtime.getRuntime().exec(new String[]{"su", "-c", "settings put global policy_control immersive.navigation=*"});
-            p.waitFor();
+            Process p = Runtime.getRuntime().exec(new String[]{"su", "-c", "settings put global policy_control immersive.full=*"});
+            if (p.waitFor() == 0) {
+                applied = true;
+            }
         } catch (Throwable ignored) {}
 
         try {
-            Process p = Runtime.getRuntime().exec("settings put global policy_control immersive.navigation=*");
+            Process p = Runtime.getRuntime().exec("settings put global policy_control immersive.full=*");
+            if (p.waitFor() == 0) {
+                applied = true;
+            }
+        } catch (Throwable ignored) {}
+
+        return applied;
+    }
+
+    public static void restoreSystemNavigationBar(Context context) {
+        if (context != null) {
+            try {
+                Settings.Global.putString(context.getContentResolver(), "policy_control", null);
+            } catch (Throwable ignored) {}
+        }
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"su", "-c", "settings delete global policy_control"});
             p.waitFor();
         } catch (Throwable ignored) {}
     }

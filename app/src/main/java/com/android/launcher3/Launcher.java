@@ -1068,6 +1068,17 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     public void setImmersiveStickyFullscreen() {
+        try {
+            androidx.core.view.WindowInsetsControllerCompat controller =
+                    androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            if (controller != null) {
+                controller.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+                controller.setSystemBarsBehavior(
+                        androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                );
+            }
+        } catch (Throwable ignored) {}
+
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -1076,6 +1087,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
+        com.android.launcher3.desktop.PlateAccessibilityService.suppressSystemNavigationBar(this);
     }
 
     public interface LauncherOverlay {

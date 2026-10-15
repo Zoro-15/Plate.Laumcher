@@ -77,6 +77,7 @@ public class DeviceProfile {
     public final int desktopTopPaddingPx;
     public final int desktopBottomPaddingPx;
     public final int desktopSidePaddingPx;
+    public final int desktopRightPaddingPx;
 
     // Drag handle
     public final int verticalDragHandleSizePx;
@@ -180,6 +181,7 @@ public class DeviceProfile {
         desktopTopPaddingPx = ResourceUtils.pxFromDp(44, dm);
         desktopBottomPaddingPx = ResourceUtils.pxFromDp(42, dm);
         desktopSidePaddingPx = Math.max(desiredWorkspaceLeftRightMarginPx, ResourceUtils.pxFromDp(12, dm));
+        desktopRightPaddingPx = Math.max(desktopSidePaddingPx, ResourceUtils.pxFromDp(46, dm));
 
         int cellLayoutPaddingLeftRightMultiplier = !isVerticalBarLayout() && isTablet
                 ? PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER : 1;
@@ -478,7 +480,7 @@ public class DeviceProfile {
             // Bottom padding ensures grid cells stay clear of bottom controls (app drawer button & nav pill).
             padding.set(desktopSidePaddingPx,
                     desktopTopPaddingPx,
-                    desktopSidePaddingPx,
+                    desktopRightPaddingPx,
                     desktopBottomPaddingPx);
         } else {
             int paddingBottom = hotseatBarSizePx + verticalDragHandleSizePx

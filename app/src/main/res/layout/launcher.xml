@@ -38,7 +38,7 @@
             android:paddingTop="44dp"
             android:paddingBottom="42dp"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="46dp"
             android:theme="@style/HomeScreenElementTheme"
             launcher:pageIndicator="@+id/page_indicator" />
 
