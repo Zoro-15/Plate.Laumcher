@@ -130,8 +130,8 @@ public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.BOTTOM | Gravity.START;
-        lp.leftMargin = ResourceUtils.pxFromDp(4, dm);
-        lp.bottomMargin = ResourceUtils.pxFromDp(2, dm);
+        lp.leftMargin = ResourceUtils.pxFromDp(10, dm);
+        lp.bottomMargin = ResourceUtils.pxFromDp(40, dm);
         popup.setLayoutParams(lp);
 
         popup.populateApps(launcher);
@@ -165,9 +165,8 @@ public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
     protected void handleClose(boolean animate) {
         if (mIsOpen) {
             mIsOpen = false;
-            View drawerBtn = mLauncher != null ? mLauncher.findViewById(R.id.btn_desktop_app_drawer) : null;
-            if (drawerBtn != null) {
-                drawerBtn.setVisibility(View.VISIBLE);
+            if (mLauncher != null) {
+                mLauncher.updateDesktopControlsVisibility();
             }
             if (animate) {
                 animate()

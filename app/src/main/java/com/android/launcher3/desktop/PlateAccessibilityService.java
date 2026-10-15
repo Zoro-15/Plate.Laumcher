@@ -140,8 +140,8 @@ public class PlateAccessibilityService extends AccessibilityService {
                         PixelFormat.TRANSLUCENT
                 );
                 statusLp.gravity = Gravity.TOP | Gravity.END;
-                statusLp.x = ResourceUtils.pxFromDp(4, dm);
-                statusLp.y = ResourceUtils.pxFromDp(2, dm);
+                statusLp.x = ResourceUtils.pxFromDp(10, dm);
+                statusLp.y = 0;
                 mWindowManager.addView(mStatusPillOverlay, statusLp);
             } catch (Exception e) {
                 Log.e(TAG, "Failed to attach status pill overlay", e);
@@ -160,8 +160,8 @@ public class PlateAccessibilityService extends AccessibilityService {
                         PixelFormat.TRANSLUCENT
                 );
                 navLp.gravity = Gravity.BOTTOM | Gravity.END;
-                navLp.x = ResourceUtils.pxFromDp(4, dm);
-                navLp.y = ResourceUtils.pxFromDp(2, dm);
+                navLp.x = ResourceUtils.pxFromDp(10, dm);
+                navLp.y = 0;
 
                 View btnMenu = mNavPillOverlay.findViewById(R.id.btn_nav_menu);
                 if (btnMenu != null) {
@@ -200,8 +200,8 @@ public class PlateAccessibilityService extends AccessibilityService {
                         PixelFormat.TRANSLUCENT
                 );
                 drawerLp.gravity = Gravity.BOTTOM | Gravity.START;
-                drawerLp.x = ResourceUtils.pxFromDp(4, dm);
-                drawerLp.y = ResourceUtils.pxFromDp(2, dm);
+                drawerLp.x = ResourceUtils.pxFromDp(10, dm);
+                drawerLp.y = 0;
 
                 mDrawerBtnOverlay.setOnClickListener(v -> {
                     Intent homeIntent = new Intent(PlateAccessibilityService.this, Launcher.class);

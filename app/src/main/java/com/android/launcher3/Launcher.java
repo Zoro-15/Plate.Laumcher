@@ -1043,6 +1043,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mStateManager.onWindowFocusChanged();
         if (hasFocus) {
             setImmersiveStickyFullscreen();
+            updateDesktopControlsVisibility();
         }
     }
 
