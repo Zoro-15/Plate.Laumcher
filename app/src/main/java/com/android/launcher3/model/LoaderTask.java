@@ -288,15 +288,16 @@ public class LoaderTask implements Runnable {
                 LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);
 
         SharedPreferences cleanPrefs = Utilities.getPrefs(context);
-        if (!cleanPrefs.getBoolean("pref_desktop_cleaned_v1", false)) {
+        if (!cleanPrefs.getBoolean("pref_desktop_cleaned_v2", false)) {
             try {
                 contentResolver.delete(LauncherSettings.Favorites.CONTENT_URI,
-                        LauncherSettings.Favorites.CONTAINER + "=" + LauncherSettings.Favorites.CONTAINER_DESKTOP,
+                        LauncherSettings.Favorites.CONTAINER + "=" + LauncherSettings.Favorites.CONTAINER_DESKTOP
+                        + " OR " + LauncherSettings.Favorites.CONTAINER + "=" + LauncherSettings.Favorites.CONTAINER_HOTSEAT,
                         null);
             } catch (Exception e) {
                 Log.e(TAG, "Failed to clean initial desktop", e);
             }
-            cleanPrefs.edit().putBoolean("pref_desktop_cleaned_v1", true).apply();
+            cleanPrefs.edit().putBoolean("pref_desktop_cleaned_v2", true).apply();
         }
 
         synchronized (mBgDataModel) {

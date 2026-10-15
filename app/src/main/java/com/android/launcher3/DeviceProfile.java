@@ -319,11 +319,11 @@ public class DeviceProfile {
     private void updateIconSize(float scale, Resources res, DisplayMetrics dm) {
         // Workspace
         final boolean isVerticalLayout = isVerticalBarLayout();
-        // In landscape desktop mode, use a smaller, refined icon size (30dp) and text size (8.5sp)
+        // In landscape desktop mode, use an optimized icon size (32dp) and text size (9.5sp)
         float invIconSizePx = isLandscape
-                ? (inv.landscapeIconSize > 0 && inv.landscapeIconSize != inv.iconSize ? inv.landscapeIconSize : 30f)
+                ? (inv.landscapeIconSize > 0 && inv.landscapeIconSize != inv.iconSize ? inv.landscapeIconSize : 32f)
                 : (isVerticalLayout ? inv.landscapeIconSize : inv.iconSize);
-        float invTextSize = isLandscape ? 8.5f : inv.iconTextSize;
+        float invTextSize = isLandscape ? 9.5f : inv.iconTextSize;
         iconSizePx = Math.max(1, (int) (ResourceUtils.pxFromDp(invIconSizePx, dm) * scale));
         iconTextSizePx = (int) (Utilities.pxFromSp(invTextSize, dm) * scale);
         iconDrawablePaddingPx = (int) (iconDrawablePaddingOriginalPx * scale);
@@ -332,7 +332,7 @@ public class DeviceProfile {
                 + Utilities.calculateTextHeight(iconTextSizePx);
         int cellYPadding = (getCellSize().y - cellHeightPx) / 2;
         if (isLandscape) {
-            int minDrawablePadding = ResourceUtils.pxFromDp(2, dm);
+            int minDrawablePadding = ResourceUtils.pxFromDp(3, dm);
             if (iconDrawablePaddingPx < minDrawablePadding) {
                 iconDrawablePaddingPx = minDrawablePadding;
             }

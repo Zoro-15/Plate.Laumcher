@@ -23,6 +23,8 @@
 
     <!-- Application name -->
     <string name="app_name">Plate Launcher</string>
+    <string name="accessibility_service_description">Enables Plate Launcher navigation pill to open Recent Apps (Overview).</string>
+    <string name="enable_accessibility_for_recents">Enable Plate Launcher in Accessibility to allow Recent Apps toggle</string>
     <!-- Default folder name -->
     <string name="folder_name"></string>
     <!-- Work folder name -->

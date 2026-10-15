@@ -130,8 +130,8 @@ public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.BOTTOM | Gravity.START;
-        lp.leftMargin = ResourceUtils.pxFromDp(2, dm);
-        lp.bottomMargin = ResourceUtils.pxFromDp(1, dm);
+        lp.leftMargin = ResourceUtils.pxFromDp(4, dm);
+        lp.bottomMargin = ResourceUtils.pxFromDp(2, dm);
         popup.setLayoutParams(lp);
 
         popup.populateApps(launcher);

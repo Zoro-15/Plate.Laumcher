@@ -138,6 +138,19 @@
             android:process=":wallpaper_chooser"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <!-- Accessibility Service for Overview / Recents trigger -->
+        <service
+            android:name="com.android.launcher3.desktop.PlateAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
         <service
             android:name="com.android.launcher3.notification.NotificationListener"
             android:label="@string/notification_dots_service_title"

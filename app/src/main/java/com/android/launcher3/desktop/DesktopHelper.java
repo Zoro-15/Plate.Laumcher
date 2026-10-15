@@ -39,7 +39,12 @@ public final class DesktopHelper {
     public static void toggleRecentApps(com.android.launcher3.Launcher launcher) {
         if (launcher == null) return;
 
-        // 1. Try IStatusBarService via ServiceManager
+        // 1. Try AccessibilityService (standard & reliable for Android 7-15)
+        if (PlateAccessibilityService.openRecents(launcher)) {
+            return;
+        }
+
+        // 2. Try IStatusBarService via ServiceManager (if running as system/priv-app)
         try {
             Class<?> smClass = Class.forName("android.os.ServiceManager");
             Method getService = smClass.getMethod("getService", String.class);
@@ -56,7 +61,7 @@ public final class DesktopHelper {
             Log.d(TAG, "IStatusBarService.toggleRecentApps failed", t);
         }
 
-        // 2. Try StatusBarManager.toggleRecentApps
+        // 3. Try StatusBarManager.toggleRecentApps
         try {
             @SuppressLint("WrongConstant")
             Object service = launcher.getSystemService("statusbar");
@@ -68,7 +73,7 @@ public final class DesktopHelper {
             Log.d(TAG, "StatusBarManager.toggleRecentApps failed", t);
         }
 
-        // 3. Fallback to Launcher Overview state
+        // 4. Fallback to Launcher Overview state
         try {
             launcher.getStateManager().goToState(com.android.launcher3.LauncherState.OVERVIEW);
         } catch (Throwable t) {

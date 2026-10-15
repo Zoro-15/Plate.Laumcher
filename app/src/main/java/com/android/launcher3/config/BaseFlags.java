@@ -68,7 +68,7 @@ public abstract class BaseFlags {
 
     public static final boolean LAUNCHER3_DISABLE_INTERACTIVE = "false".equals(Utilities.getSystemProperty("debug.launcher3.enable", "true"));
 
-    public static final boolean LAUNCHER3_REMOVE_DRAWER = "false".equals(Utilities.getSystemProperty("persist.sys.bd.launcher_remove_drawer", "false"));
+    public static final boolean LAUNCHER3_REMOVE_DRAWER = false;
 
     // Enable moving the QSB on the 0th screen of the workspace
     //public static final boolean QSB_ON_FIRST_SCREEN = true;

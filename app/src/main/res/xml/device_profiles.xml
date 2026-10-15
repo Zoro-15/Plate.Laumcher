@@ -19,8 +19,8 @@
 
     <grid-option
         launcher:name="3_by_3"
-        launcher:numRows="9"
-        launcher:numColumns="16"
+        launcher:numRows="8"
+        launcher:numColumns="14"
         launcher:numFolderRows="2"
         launcher:numFolderColumns="3"
         launcher:numHotseatIcons="3"
@@ -31,7 +31,7 @@
             launcher:minWidthDps="255"
             launcher:minHeightDps="300"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -40,7 +40,7 @@
             launcher:minWidthDps="255"
             launcher:minHeightDps="400"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -48,8 +48,8 @@
 
     <grid-option
         launcher:name="4_by_4"
-        launcher:numRows="9"
-        launcher:numColumns="16"
+        launcher:numRows="8"
+        launcher:numColumns="14"
         launcher:numFolderRows="4"
         launcher:numFolderColumns="4"
         launcher:numHotseatIcons="4"
@@ -60,7 +60,7 @@
             launcher:minWidthDps="275"
             launcher:minHeightDps="420"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -69,7 +69,7 @@
             launcher:minWidthDps="255"
             launcher:minHeightDps="450"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -78,7 +78,7 @@
             launcher:minWidthDps="296"
             launcher:minHeightDps="491.33"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -87,7 +87,7 @@
             launcher:minWidthDps="359"
             launcher:minHeightDps="567"
             launcher:iconImageSize="54"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -96,7 +96,7 @@
             launcher:minWidthDps="335"
             launcher:minHeightDps="567"
             launcher:iconImageSize="65"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
@@ -104,8 +104,8 @@
 
     <grid-option
         launcher:name="5_by_5"
-        launcher:numRows="9"
-        launcher:numColumns="16"
+        launcher:numRows="8"
+        launcher:numColumns="14"
         launcher:numFolderRows="4"
         launcher:numFolderColumns="4"
         launcher:numHotseatIcons="5"
@@ -116,7 +116,7 @@
             launcher:minWidthDps="406"
             launcher:minHeightDps="694"
             launcher:iconImageSize="56"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="14.4"
             launcher:canBeDefault="true" />
 
@@ -125,7 +125,7 @@
             launcher:minWidthDps="255"
             launcher:minHeightDps="400"
             launcher:iconImageSize="48"
-            launcher:landscapeIconSize="30"
+            launcher:landscapeIconSize="32"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
 
