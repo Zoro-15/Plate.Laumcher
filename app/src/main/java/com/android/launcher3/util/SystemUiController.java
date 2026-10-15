@@ -76,7 +76,14 @@ public class SystemUiController {
             } else if ((stateFlag & FLAG_DARK_STATUS) != 0) {
                 newFlags &= ~(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
-        }
+        // Permanently enforce sticky immersive fullscreen flags for desktop experience
+        newFlags |= (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         if (newFlags != oldFlags) {
             mWindow.getDecorView().setSystemUiVisibility(newFlags);
         }

@@ -212,6 +212,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     private LauncherStateManager mStateManager;
 
+    private static volatile Launcher sLauncherInstance;
+    private final Runnable mRestoreImmersiveRunnable = this::setImmersiveStickyFullscreen;
+
+    public static Launcher getActiveLauncher() {
+        return sLauncherInstance;
+    }
+
     private static final int ON_ACTIVITY_RESULT_ANIMATION_DELAY = 500;
 
     // How long to wait before the new-shortcut animation automatically pans the workspace
@@ -312,6 +319,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         TraceHelper.beginSection("Launcher-onCreate");
 
         super.onCreate(savedInstanceState);
+        sLauncherInstance = this;
         TraceHelper.partitionSection("Launcher-onCreate", "super call");
 
         LauncherAppState app = LauncherAppState.getInstance(this);
@@ -378,10 +386,17 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         setContentView(mLauncherView);
         getRootView().dispatchInsets();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            getWindow().getAttributes().layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
         setImmersiveStickyFullscreen();
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> {
-            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                setImmersiveStickyFullscreen();
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0
+                    || (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+                mHandler.removeCallbacks(mRestoreImmersiveRunnable);
+                mHandler.postDelayed(mRestoreImmersiveRunnable, 300);
             }
         });
 
@@ -1005,11 +1020,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         }
 
         setImmersiveStickyFullscreen();
+        mHandler.postDelayed(mRestoreImmersiveRunnable, 300);
         updateDesktopControlsVisibility();
         if (getIntent() != null && getIntent().getBooleanExtra("extra_open_drawer", false)) {
             getIntent().removeExtra("extra_open_drawer");
             if (mWorkspace != null) {
-                mWorkspace.post(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this));
+                mWorkspace.postDelayed(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this), 150);
             }
         }
 
@@ -1043,6 +1059,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mStateManager.onWindowFocusChanged();
         if (hasFocus) {
             setImmersiveStickyFullscreen();
+            mHandler.postDelayed(mRestoreImmersiveRunnable, 300);
             updateDesktopControlsVisibility();
         }
     }
@@ -1399,6 +1416,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        setImmersiveStickyFullscreen();
+        mHandler.postDelayed(mRestoreImmersiveRunnable, 300);
 
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onAttachedToWindow();
@@ -1482,10 +1501,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         boolean internalStateHandled = InternalStateHandler
                 .handleNewIntent(this, intent, isStarted());
 
-        if (intent != null && intent.getBooleanExtra("extra_open_drawer", false)) {
-            if (mWorkspace != null) {
-                mWorkspace.post(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this));
-            }
+        boolean openDrawer = intent != null && intent.getBooleanExtra("extra_open_drawer", false);
+        if (openDrawer) {
+            intent.removeExtra("extra_open_drawer");
         }
 
         if (isActionMain) {
@@ -1523,6 +1541,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
             if (mLauncherCallbacks != null) {
                 mLauncherCallbacks.onHomeIntent(internalStateHandled);
+            }
+        }
+
+        if (openDrawer) {
+            if (mWorkspace != null) {
+                mWorkspace.postDelayed(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this), 150);
             }
         }
 
@@ -1577,6 +1601,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (sLauncherInstance == this) {
+            sLauncherInstance = null;
+        }
+        mHandler.removeCallbacks(mRestoreImmersiveRunnable);
         com.android.launcher3.desktop.PlateAccessibilityService.setServiceListener(null);
 
         unregisterReceiver(mScreenOffReceiver);

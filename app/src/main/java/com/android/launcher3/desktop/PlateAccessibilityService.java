@@ -123,8 +123,7 @@ public class PlateAccessibilityService extends AccessibilityService {
 
         int flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
         android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
 
@@ -141,7 +140,7 @@ public class PlateAccessibilityService extends AccessibilityService {
                 mStatusPillOverlay = inflater.inflate(R.layout.desktop_status_pill, null);
                 WindowManager.LayoutParams statusLp = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        ResourceUtils.pxFromDp(40, dm),
                         overlayType,
                         flags,
                         PixelFormat.TRANSLUCENT
@@ -163,7 +162,7 @@ public class PlateAccessibilityService extends AccessibilityService {
                 mNavPillOverlay = inflater.inflate(R.layout.desktop_nav_pill, null);
                 WindowManager.LayoutParams navLp = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        ResourceUtils.pxFromDp(36, dm),
                         overlayType,
                         flags,
                         PixelFormat.TRANSLUCENT
@@ -204,8 +203,8 @@ public class PlateAccessibilityService extends AccessibilityService {
             try {
                 mDrawerBtnOverlay = inflater.inflate(R.layout.desktop_drawer_button, null);
                 WindowManager.LayoutParams drawerLp = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        ResourceUtils.pxFromDp(42, dm),
+                        ResourceUtils.pxFromDp(36, dm),
                         overlayType,
                         flags,
                         PixelFormat.TRANSLUCENT
@@ -216,12 +215,17 @@ public class PlateAccessibilityService extends AccessibilityService {
                 drawerLp.y = 0;
 
                 mDrawerBtnOverlay.setOnClickListener(v -> {
-                    Intent homeIntent = new Intent(PlateAccessibilityService.this, Launcher.class);
-                    homeIntent.setAction(Intent.ACTION_MAIN);
-                    homeIntent.addCategory(Intent.CATEGORY_HOME);
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                    homeIntent.putExtra("extra_open_drawer", true);
-                    startActivity(homeIntent);
+                    Launcher launcher = Launcher.getActiveLauncher();
+                    if (launcher != null && launcher.hasWindowFocus() && launcher.isStarted()) {
+                        AppDrawerPopup.toggle(launcher);
+                    } else {
+                        Intent homeIntent = new Intent(PlateAccessibilityService.this, Launcher.class);
+                        homeIntent.setAction(Intent.ACTION_MAIN);
+                        homeIntent.addCategory(Intent.CATEGORY_HOME);
+                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                        homeIntent.putExtra("extra_open_drawer", true);
+                        startActivity(homeIntent);
+                    }
                 });
 
                 mDrawerBtnOverlay.setSystemUiVisibility(systemUiFlags);
@@ -293,7 +297,22 @@ public class PlateAccessibilityService extends AccessibilityService {
         return false;
     }
 
-    public static void suppressSystemNavigationBar() {
+    public void setDrawerButtonVisibility(int visibility) {
+        if (mDrawerBtnOverlay != null) {
+            mDrawerBtnOverlay.setVisibility(visibility);
+        }
+    }
+
+    public void suppressSystemNavigationBar() {
+        suppressSystemNavigationBar(this);
+    }
+
+    public static void suppressSystemNavigationBar(Context context) {
+        if (context != null) {
+            try {
+                Settings.Global.putString(context.getContentResolver(), "policy_control", "immersive.navigation=*");
+            } catch (Throwable ignored) {}
+        }
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"su", "-c", "settings put global policy_control immersive.navigation=*"});
             p.waitFor();

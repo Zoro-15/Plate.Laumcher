@@ -111,6 +111,10 @@ public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
         if (drawerBtn != null) {
             drawerBtn.setVisibility(View.INVISIBLE);
         }
+        PlateAccessibilityService service = PlateAccessibilityService.getInstance();
+        if (service != null) {
+            service.setDrawerButtonVisibility(View.INVISIBLE);
+        }
 
         BaseDragLayer dragLayer = launcher.getDragLayer();
         AppDrawerPopup popup = (AppDrawerPopup) launcher.getLayoutInflater()
@@ -167,6 +171,10 @@ public class AppDrawerPopup extends AbstractFloatingView implements DragSource {
             mIsOpen = false;
             if (mLauncher != null) {
                 mLauncher.updateDesktopControlsVisibility();
+            }
+            PlateAccessibilityService service = PlateAccessibilityService.getInstance();
+            if (service != null) {
+                service.setDrawerButtonVisibility(View.VISIBLE);
             }
             if (animate) {
                 animate()
