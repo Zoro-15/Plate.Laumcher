@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btn_desktop_app_drawer"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:background="@drawable/bg_desktop_circle"
+    android:padding="6dp"
+    android:src="@drawable/ic_apps_grid"
+    android:tint="#FFFFFFFF"
+    android:clickable="true"
+    android:focusable="true"
+    android:contentDescription="Apps" />

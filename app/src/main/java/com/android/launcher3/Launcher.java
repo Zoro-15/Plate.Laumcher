@@ -395,6 +395,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mLauncherCallbacks.onCreate(savedInstanceState);
         }
         mRotationHelper.initialize();
+        com.android.launcher3.desktop.PlateAccessibilityService.setServiceListener(
+                running -> runOnUiThread(this::updateDesktopControlsVisibility));
 
         TraceHelper.endSection("Launcher-onCreate");
         RaceConditionTracker.onEvent(ON_CREATE_EVT, EXIT);
@@ -1003,6 +1005,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         }
 
         setImmersiveStickyFullscreen();
+        updateDesktopControlsVisibility();
+        if (getIntent() != null && getIntent().getBooleanExtra("extra_open_drawer", false)) {
+            getIntent().removeExtra("extra_open_drawer");
+            if (mWorkspace != null) {
+                mWorkspace.post(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this));
+            }
+        }
 
         TraceHelper.endSection("ON_RESUME");
         RaceConditionTracker.onEvent(ON_RESUME_EVT, EXIT);
@@ -1205,6 +1214,19 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mDragLayer.setVisibility(View.INVISIBLE);
             mWorkspace.setVisibility(View.GONE);
         }
+
+        updateDesktopControlsVisibility();
+    }
+
+    public void updateDesktopControlsVisibility() {
+        boolean overlayRunning = com.android.launcher3.desktop.PlateAccessibilityService.isServiceRunning();
+        int visibility = overlayRunning ? View.GONE : View.VISIBLE;
+        View btnAppDrawer = findViewById(R.id.btn_desktop_app_drawer);
+        View navPill = findViewById(R.id.desktop_nav_pill);
+        View statusPill = findViewById(R.id.desktop_status_pill);
+        if (btnAppDrawer != null) btnAppDrawer.setVisibility(visibility);
+        if (navPill != null) navPill.setVisibility(visibility);
+        if (statusPill != null) statusPill.setVisibility(visibility);
     }
 
     /**
@@ -1459,6 +1481,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         boolean internalStateHandled = InternalStateHandler
                 .handleNewIntent(this, intent, isStarted());
 
+        if (intent != null && intent.getBooleanExtra("extra_open_drawer", false)) {
+            if (mWorkspace != null) {
+                mWorkspace.post(() -> com.android.launcher3.desktop.AppDrawerPopup.show(this));
+            }
+        }
+
         if (isActionMain) {
             if (!internalStateHandled) {
                 // In all these cases, only animate if we're already on home
@@ -1548,6 +1576,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void onDestroy() {
         super.onDestroy();
+        com.android.launcher3.desktop.PlateAccessibilityService.setServiceListener(null);
 
         unregisterReceiver(mScreenOffReceiver);
         mWorkspace.removeFolderListeners();
