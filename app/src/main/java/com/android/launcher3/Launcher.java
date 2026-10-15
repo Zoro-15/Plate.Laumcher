@@ -79,6 +79,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.OvershootInterpolator;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.launcher3.DropTarget.DragObject;
@@ -388,8 +389,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         getRootView().dispatchInsets();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            getWindow().getAttributes().layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.layoutInDisplayCutoutMode =
                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().setAttributes(lp);
         }
         setImmersiveStickyFullscreen();
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> {
